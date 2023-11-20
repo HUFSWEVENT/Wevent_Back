@@ -5,7 +5,7 @@ from .models import event, advertise
 
 @admin.register(event)
 class EventModelAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'host', 'host_email', 'date', 'deadline', 'event_image', 'user')
+    list_display = ('id', 'title', 'host', 'host_email', 'date', 'deadline', 'event_image', 'user', 'created_at')
 
 @admin.register(advertise)
 class AdvertiseModelAdmin(admin.ModelAdmin):
