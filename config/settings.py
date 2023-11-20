@@ -48,6 +48,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 # Application definition
 
@@ -63,6 +68,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'events',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -155,27 +161,37 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'account.user'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', # 인증된 사용자만 접근
-        # 'rest_framework.permissions.IsAdminUser', # 관리자만 접근
-        # 'rest_framework.permissions.AllowAny', # 누구나 접근
-    ),
-}
-
-REST_USE_JWT = True
-
+##CORS
+# CORS_ORIGIN_WHITELIST = []
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    #만약 허용해야할 추가적인 헤더키가 있다면(사용자정의 키) 여기에 추가하면 됩니다.
+)
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
@@ -202,29 +218,3 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-
-
-##CORS
-# CORS_ORIGIN_WHITELIST = []
-CORS_ORIGIN_ALLOW_ALL=True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = (
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-)
-CORS_ALLOW_HEADERS = (
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    #만약 허용해야할 추가적인 헤더키가 있다면(사용자정의 키) 여기에 추가하면 됩니다.
-)
