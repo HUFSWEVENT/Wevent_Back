@@ -2,7 +2,7 @@ import jwt
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .serializers import *
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -13,7 +13,7 @@ from rest_framework import routers
 from django.urls import path, include
 from django.contrib.auth import authenticate
 from django.shortcuts import render, get_object_or_404
-from watti_backend.settings import SECRET_KEY
+from config.settings import SECRET_KEY
 
 class AuthAPIView(APIView):
     # 유저 정보 확인

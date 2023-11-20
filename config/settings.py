@@ -48,12 +48,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -64,11 +58,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'corsheaders',
     'accounts',
     'events',
-    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -161,7 +155,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'account.user'
+AUTH_USER_MODEL = 'accounts.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', # 인증된 사용자만 접근
+        # 'rest_framework.permissions.IsAdminUser', # 관리자만 접근
+        # 'rest_framework.permissions.AllowAny', # 누구나 접근
+    ),
+}
 
 ##CORS
 # CORS_ORIGIN_WHITELIST = []
@@ -187,6 +193,9 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     #만약 허용해야할 추가적인 헤더키가 있다면(사용자정의 키) 여기에 추가하면 됩니다.
 )
+
+REST_USE_JWT = True
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
