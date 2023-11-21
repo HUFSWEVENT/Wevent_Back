@@ -13,11 +13,12 @@ class UserManager(BaseUserManager):
             email=email,
             password = password,
         )
+        user.is_active = False
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username=None, email=None, password=None, phoneNumber=None, **extra_fields):
+    def create_superuser(self, username=None, email=None, password=None, **extra_fields):
         superuser = self.create_user(
             username=username,
             email=email,
@@ -32,9 +33,17 @@ class UserManager(BaseUserManager):
         return superuser
 
 class User(AbstractUser):
-    phoneNumber = models.CharField('전화번호', max_length=11)
+    email = models.EmailField('이메일 주소', unique=True)
+    phoneNumber = models.CharField('전화번호', max_length=11, blank=True)
+    first_name = None
+    last_name = None
+    
 
     objects = UserManager()
 
     def __str__(self):
         return self.email
+    
+class CodeForAuth(models.Model):
+    email = models.EmailField(max_length=50)
+    code = models.CharField(max_length=6, null=True, blank=True)
