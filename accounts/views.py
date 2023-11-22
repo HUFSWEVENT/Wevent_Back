@@ -163,3 +163,14 @@ class TokenRefreshAPIView(APIView):
             access = serializer.validated_data.get('access', None)
             return Response({"access": access})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class PwResetAPIView(APIView):
+    def post(self, request): # pw 변경
+        user = request.user
+        password = request.data.get("password", None)
+        if password == None:
+            return Response({"message": "No password key"}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(password)
+        user.save()
+        return Response({"message": "password changed."}, status=status.HTTP_202_ACCEPTED)
